@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Executive Insights — Latest Posts</title>
+        <title>Executive Insights</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="../imgs/foodie.ico">
         <link rel="stylesheet" href="../css/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="../js/posts.js" defer></script>
+        <script src="../js/index.js" defer></script>
         <script src="../js/main.js" defer></script>
         <style>
             *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -63,7 +62,9 @@
             }
 
             /* ── Dropdown ── */
-            .dropdown { position: relative; }
+            .dropdown {
+                position: relative;
+            }
 
             #login_link {
                 background: transparent;
@@ -80,7 +81,10 @@
                 transition: border-color 0.2s, background 0.2s;
             }
 
-            #login_link:hover { border-color: #7a9cc4; background: #1a2438; }
+            #login_link:hover {
+                border-color: #7a9cc4;
+                background: #1a2438;
+            }
 
             .dropdown-content {
                 display: none;
@@ -148,68 +152,87 @@
                 padding: 0 2rem;
             }
 
-            /* ── Posts panel ── */
-            .posts-panel {
+            /* ── Hero section ── */
+            .hero-section {
+                background-color: #131c2e;
+                padding: 2.5rem 2.5rem;
+                margin-bottom: 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 2rem;
+            }
+
+            .hero-text h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.6rem;
+                font-weight: 400;
+                color: #d6e4f5;
+                margin-bottom: 0.5rem;
+            }
+
+            .hero-text h2 em {
+                font-style: italic;
+                color: #7a9cc4;
+            }
+
+            .hero-text p {
+                font-size: 14px;
+                color: #5a6a82;
+                line-height: 1.6;
+            }
+
+            .link_btn {
+                display: inline-block;
+                padding: 0.65rem 1.4rem;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 12px;
+                font-weight: 500;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: #f0f2f7;
+                background: #4a7aab;
+                text-decoration: none;
+                border: none;
+                cursor: pointer;
+                transition: background 0.2s;
+                white-space: nowrap;
+            }
+
+            .link_btn:hover { background: #7a9cc4; color: #131c2e; }
+
+            /* ── Posts section ── */
+            .posts-section {
                 background: #fff;
                 border: 1px solid #c4d0de;
                 padding: 2rem 2.5rem;
             }
 
-            .posts-panel-header {
-                margin-bottom: 1.2rem;
+            .posts-section-header {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                margin-bottom: 1.5rem;
                 padding-bottom: 1rem;
                 border-bottom: 1px solid #e8edf4;
             }
 
-            .posts-panel-header h2 {
+            .posts-section-header h2 {
                 font-family: 'Playfair Display', serif;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 font-weight: 600;
                 color: #131c2e;
-                margin-bottom: 0.3rem;
             }
 
-            .posts-panel-header p {
+            .posts-section-header p {
                 font-size: 13px;
                 color: #7a8a9a;
             }
 
-            /* ── Search bar ── */
-            .search-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-bottom: 1.5rem;
-            }
-
-            .search-row .fa-search {
-                font-size: 15px;
-                color: #7a9cc4;
-            }
-
-            .search_bar {
-                flex: 1;
-                padding: 0.65rem 1rem;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 14px;
-                color: #131c2e;
-                background: #f0f2f7;
-                border: 1px solid #c4d0de;
-                outline: none;
-                transition: border-color 0.2s;
-                border-radius: 0;
-                height: auto;
-                width: auto;
-                display: inline-block;
-            }
-
-            .search_bar:focus { border-color: #4a7aab; }
-            .search_bar::placeholder { color: #9aaabb; }
-
-            /* ── Post cards ── */
+            /* ── Individual post cards ── */
             .post {
                 border-bottom: 1px solid #e8edf4;
-                padding: 1.4rem 0;
+                padding: 1.2rem 0;
             }
 
             .post:last-child { border-bottom: none; }
@@ -278,36 +301,26 @@
         <!-- Nav -->
         <nav>
             <ul>
-                <li><a href="../html/index.html">Home</a></li>
-                <li class="active"><a href="../html/posts.html">Latest Posts</a></li>
+                <li class="active"><a href="../html/index_subs.html">Home</a></li>
+                <li><a href="../html/posts.html">Latest Posts</a></li>
                 <li><a href="../html/my_posts.html">My Posts</a></li>
             </ul>
         </nav>
 
         <!-- Main content -->
         <main>
-            <div class="posts-panel">
-                <div class="posts-panel-header">
-                    <h2>Latest Executive Posts</h2>
-                    <p>Insights and perspectives from across the the leadership team.</p>
+
+
+            <div class="posts-section">
+                <div class="posts-section-header">
+                    <h2>Latest Posts</h2>
+                    <a class="link_btn" href="../html/posts.html">See all posts</a>
                 </div>
 
-                <div class="search-row">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                    <input
-                        class="search_bar"
-                        id="search"
-                        name="search"
-                        type="text"
-                        placeholder="Search posts..."
-                        maxlength="100"
-                        autocomplete="off"
-                    >
-                </div>
-
-                <!-- Posts injected here by posts.js -->
+                <!-- Posts injected here by index.js -->
                 <div id="postsList"></div>
             </div>
+
         </main>
 
         <footer>
