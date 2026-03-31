@@ -4,6 +4,24 @@ const port = 3000;
 
 const pgp = require ('pg-promise')();
 
+// Create the posts JSON from database
+
+const cn_posts =   {
+    host: 'db',
+    port: 5432,
+    database: 'blogapp',
+    user: 'blogapp_user',
+    password: 'blogapp_user_password',
+    max: 30 // use up to 30 connections
+
+    
+};
+
+const db_posts = pgp (cn_posts);
+
+ 
+
+
 
 const cn =  {
     host: 'db',
@@ -33,7 +51,17 @@ app.get('/', async (req, res) => {
             console.log(err);
         }
     })
+
+       console.log ( ' Do I get here - line 22 of app.js');
+
+     const post_data = await db_posts.manyOrNone ( 'select postid, username , entrytime, title ,content from posts inner join  blogapp_admin.user_vw on blogapp_admin.user_vw.id= posts.userid  ');
+
+       let data_posts = JSON.stringify(post_data);
+   fs.writeFileSync(__dirname + '/public/json/posts.json', data_posts);
+
 });
+
+
 
 // Reset login_attempt.json when server restarts
 let login_attempt = {"username" : "null", "password" : "null"};
@@ -52,33 +80,45 @@ app.post('/',  async (req, res) => {
  
 
    const login_check = await  db.one('SELECT check_user_login ($1,$2, $3, $4) as check', [username, password , 'localhost','127.0.0.1']) ;
-  
-
-  
-
-
     // Valid username and password both entered together
     
     if(login_check.check == 0 ) {
-  // Update login_attempt with credentials
+        // Update login_attempt with credentials
         let login_attempt = {"username" : username, "password" : password};
         let data = JSON.stringify(login_attempt);
 
-        console.log (' Do I get here - line 109');
-        fs.writeFileSync(__dirname + '/public/json/login_attempt.json', data);
+
+       fs.writeFileSync(__dirname + '/public/json/login_attempt.json', data);
 
         // Update current user upon successful login
         currentUser = req.body.username_input;
-console.log(' Do I get here - line 113 ' +__dirname + '/public/html/index.html');
-        // Redirect to home page
-        res.sendFile(__dirname + '/public/html/index.html', (err) => {
+
+        // Check if user is a subscriber
+
+        const subs = await db.one ( 'select role from user_vw where username = $1', [currentUser]);
+
+        console.log ( ' Got here - line 105 - subs.role is ' + subs.role );
+           // Redirect to home page
+        if ( subs.role == 'CONTRIBUTOR') {
+
+            console.log ( ' Got here - line 104 - CONTRIB - subs.role is ' + subs.role );
+            res.sendFile(__dirname + '/public/html/index.html', (err) => {
+              if (err){
+                  console.log(err);
+              }
+            })
+        } 
+        else {
+            console.log ( ' Got here - line 112 - SUBS - subs.role is ' + subs.role );
+        res.sendFile(__dirname + '/public/html/index_subs.html', (err) => {
             if (err){
                 console.log(err);
             }
-        })
+            })
 
-    
-    } else {
+        }
+    }  
+    else {
         // Resend the failed login page
         res.sendFile(__dirname + '/public/html/login_failed.html', (err) => {
         if (err){
@@ -90,8 +130,8 @@ console.log(' Do I get here - line 113 ' +__dirname + '/public/html/index.html')
 });
 
 // Make a post POST request
-app.post('/makepost', function(req, res) {
-
+app.post('/makepost', async function(req, res) {
+  console.log ( 'Makepost called ');
     // Read in current posts
     const json = fs.readFileSync(__dirname + '/public/json/posts.json');
     var posts = JSON.parse(json);
@@ -126,6 +166,14 @@ app.post('/makepost', function(req, res) {
     posts.push({"username": currentUser , "timestamp": curDate, "postId": newId, "title": req.body.title_field, "content": req.body.content_field});
 
     fs.writeFileSync(__dirname + '/public/json/posts.json', JSON.stringify(posts));
+
+    // Write post to database, after checking for 
+    const query_post = 'with user_w as (select id as userid from blogapp_admin.user_vw  where username=$1) \
+           insert into posts ( userid, title, content )   select userid , $2 as title, $3 as content from user_w;';
+ 
+    await db_posts.none (query_post, [ currentUser,  req.body.title_field ,req.body.content_field]);
+ 
+
 
     // Redirect back to my_posts.html
     res.sendFile(__dirname + "/public/html/my_posts.html");
