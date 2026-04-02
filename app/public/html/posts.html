@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Executive Insights — Latest Posts</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="/imgs/foodie.ico">
+        <link rel="stylesheet" href="/css/posts.css">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="../js/posts.js" defer></script>
+        <script src="../js/main.js" defer></script>
+    </head>
+    <body>
+        <!-- Header -->
+        <header>
+            <a class="header-left" href="/index.html">
+                <div class="brand-icon">
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                        <rect x="1" y="1" width="7" height="7" stroke="#7a9cc4" stroke-width="1"/>
+                        <rect x="10" y="1" width="7" height="7" stroke="#7a9cc4" stroke-width="1"/>
+                        <rect x="1" y="10" width="7" height="7" stroke="#7a9cc4" stroke-width="1"/>
+                        <rect x="10" y="10" width="7" height="7" fill="#7a9cc4"/>
+                    </svg>
+                </div>
+                <span class="brand-name">Executive Insights</span>
+            </a>
+
+            <div class="dropdown">
+                <button id="login_link">Username
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M2 3.5L5 6.5L8 3.5" stroke="#7a9cc4" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="dropdown-content">
+                    <a id="logout_btn" href="/">Sign out</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Nav -->
+        <nav>
+            <ul>
+                <li><a href="/index.html">Home</a></li>
+                <li class="active"><a href="/posts">Latest Posts</a></li>
+                <li><a href="/my_posts">My Posts</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <main>
+            <div class="posts-panel">
+                <div class="posts-panel-header">
+                    <h2>Latest Executive Posts</h2>
+                    <p>Insights and perspectives from across the the leadership team.</p>
+                </div>
+
+                <div class="search-row">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input
+                        class="search_bar"
+                        id="search"
+                        name="search"
+                        type="text"
+                        placeholder="Search posts..."
+                        maxlength="100"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- Posts injected here by posts.js -->
+                <div id="postsList"></div>
+            </div>
+        </main>
+
+        <footer>
+            &copy; Executive Insights. All rights reserved.
+        </footer>
+
+    </body>
+</html>
