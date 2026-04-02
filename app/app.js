@@ -1,4 +1,3 @@
-@ -0,0 +1,269 @@
 const express = require('express')
 const app = express();
 const port = 3000;
@@ -8,6 +7,7 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const session = require('express-session');
 const { authenticateUser, checkContributor } = require('./authorizeuser.js');
+//needs to moved to secure location
 const pepper = 'yshlxehpyoxi'
 
 //session middleware -Vin
