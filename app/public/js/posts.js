@@ -71,7 +71,6 @@ function searchPosts() {
 
     let postList = document.getElementById('postsList');
     let posts = postList.getElementsByTagName('article');
-
     // Loop through all posts, and hide ones that don't match the search
     for (i = 0; i < posts.length; i++) {
 

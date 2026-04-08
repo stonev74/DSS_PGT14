@@ -13,7 +13,6 @@ async function loadLatestPosts() {
             postList.removeChild(postList.children[i]);
         }
     }
-
     // Load latest 2 posts
     for(let i = post_data.length - 1; i > post_data.length - 3; i--) {
         let author = post_data[i].username;
