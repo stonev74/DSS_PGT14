@@ -27,8 +27,8 @@ loginForm.addEventListener("submit", async function(e) {
         console.error('Login error', err);
         showLoginError('Server error, please try again.')
     }
-}
-)
+})
+
 //function for changing webpage for error message
 function showLoginError(message){
     const existing = document.getElementById("login_error");

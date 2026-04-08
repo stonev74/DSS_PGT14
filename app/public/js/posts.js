@@ -30,7 +30,7 @@ async function loadPosts() {
         let postIdContainer = document.createElement("p");
         postIdContainer.textContent = postId;
         postIdContainer.hidden = true;
-        postId.id = "postId";
+        postIdContainer.id = "postId";
         postContainer.appendChild(postIdContainer);
 
         let img = document.createElement('img');
@@ -54,7 +54,8 @@ async function loadPosts() {
         contentContainer.textContent = content;
         figcap.appendChild(contentContainer);
 
-        postList.insertBefore(postContainer, document.querySelectorAll("article")[0]);
+        const firstArticle = postList.querySelector("article");
+        postList.insertBefore(postContainer, firstArticle);
     }
 }
 

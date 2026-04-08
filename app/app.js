@@ -1,4 +1,4 @@
-@ -0,0 +1,269 @@
+
 const express = require('express')
 const app = express();
 const port = 3000;
@@ -8,7 +8,9 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const session = require('express-session');
 const { authenticateUser, checkContributor } = require('./authorizeuser.js');
-const pepper = 'yshlxehpyoxi'
+const { getPosts } = require('./getposts.js');
+const { get } = require('http');
+const pepper = 'yshlxehpyoxi';
 
 //session middleware -Vin
 //memory store for session
@@ -63,6 +65,7 @@ const db = pgp(cn);
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/js', express.static(__dirname + '/public/js'));
 app.use('/imgs', express.static(__dirname + '/public/imgs'));
+app.use('/json', express.static(__dirname + '/public/json'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -77,10 +80,7 @@ app.get('/', async (req, res) => {
       console.log(err);
     }
   })
-  //not sure what this is doing
-  const post_data = await db_posts.manyOrNone ( 'select postid, username , entrytime, title ,content from posts inner join  blogapp_admin.user_vw on blogapp_admin.user_vw.id= posts.userid  ');
-  let data_posts = JSON.stringify(post_data);
-  fs.writeFileSync(__dirname + '/public/json/posts.json', data_posts);
+  //moved code for getting posts from json to index and posts pages
 });
 
 //Register GET route -Vin
@@ -160,10 +160,19 @@ app.post('/', async (req, res) => {
 });
 
 //protected pages
-//need get requests for post pages
+//middleware for refreshing posts.json
+const refreshPosts = async(req, res, next) => {
+  try{
+    await getPosts(db_posts);
+  } catch (err){
+    console.error('Failed to refresh posts:', err)
+    res.status(500).send('Unable to get posts.')
+  }
+  next();
+}
 
 //get route for contrib homepage
-app.get('/index.html', authenticateUser, (req, res) => {
+app.get('/index.html', authenticateUser, refreshPosts, (req, res) => {
   //checks role if user exists
   const role = req.session.user?.role;
   //only send to regular index if contributor
@@ -174,20 +183,22 @@ app.get('/index.html', authenticateUser, (req, res) => {
   return res.redirect('/index_subs.html')
 });
 //get route sub home page
-app.get('/index_subs.html', authenticateUser, (req, res) => {
+app.get('/index_subs.html', authenticateUser, refreshPosts, (req, res) => {
     res.sendFile(__dirname + '/public/html/index_subs.html')
 });
+
 //get route to give current user to front end
 app.get('/current-user', authenticateUser, (req, res) => {
   return res.json({ username: req.session.user.username })
 })
 //get route for posts page
-app.get('/posts', authenticateUser, (req, res) => {
-  res.sendFile(__dirname + '/public/html/posts.html')
+app.get('/posts', authenticateUser, refreshPosts, (req, res) => {
+  res.sendFile(__dirname + '/public/html/posts.html');
 });
+
 //get route for my_posts page
 app.get('/my_posts', authenticateUser, (req, res) => {
-  res.sendFile(__dirname + '/public/html/my_posts.html')
+  res.sendFile(__dirname + '/public/html/my_posts.html');
 });
 
 // Make a post POST request

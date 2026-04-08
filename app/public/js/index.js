@@ -30,7 +30,7 @@ async function loadLatestPosts() {
         let postIdContainer = document.createElement("p");
         postIdContainer.textContent = postId;
         postIdContainer.hidden = true;
-        postId.id = "postId";
+        postIdContainer.id = "postId";
         postContainer.appendChild(postIdContainer);
 
         let img = document.createElement('img');
