@@ -12,7 +12,7 @@ loginForm.addEventListener("submit", async function(e) {
         return;
     }
     try {
-        const response = await fetch("/", {
+        const response = await fetch("/password", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username_input: username, password_input: password })

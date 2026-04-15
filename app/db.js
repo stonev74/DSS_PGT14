@@ -1,20 +1,37 @@
-//Module for database variables and intitialising postgres pool -Vin
+//Module for database variables and initialising pg-promise connections -Vin
 
-const { Pool } = require('pg');
+const pgp = require('pg-promise')();
 
-const db = new Pool({
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT || 5432,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-});
-
-const USERS_TABLE = 'public.users';
-
-async function verifyDatabaseConnection() {
-    await db.query('SELECT NOW()');
-    console.log('Postgres connected')
+// Connection for admin operations (register, auth)
+const cn = {
+  host: process.env.POSTGRES_HOST || 'db',
+  port: process.env.POSTGRES_PORT || 5432,
+  database: process.env.POSTGRES_DB || 'blogapp',
+  user: process.env.POSTGRES_ADMIN_USER || 'blogapp_admin',
+  password: process.env.POSTGRES_ADMIN_PASSWORD || 'blogapp_admin_password',
+  max: 30 // connection pool limit
 };
 
-module.exports = { db, USERS_TABLE, verifyDatabaseConnection }
+// Connection for read-only posts operations
+const cn_posts = {
+  host: process.env.POSTGRES_HOST || 'db',
+  port: process.env.POSTGRES_PORT || 5432,
+  database: process.env.POSTGRES_DB || 'blogapp',
+  user: process.env.POSTGRES_USER || 'blogapp_user',
+  password: process.env.POSTGRES_PASSWORD || 'blogapp_user_password',
+  max: 30 // connection pool limit
+};
+
+const db = pgp(cn);
+const db_posts = pgp(cn_posts);
+
+async function verifyDatabaseConnection() {
+  try {
+    await db.one('SELECT NOW()');
+    console.log('Postgres connected');
+  } catch (err) {
+    console.error('Database connection failed:', err);
+  }
+}
+
+module.exports = { db, db_posts, verifyDatabaseConnection };
