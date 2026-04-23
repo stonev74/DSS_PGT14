@@ -1,6 +1,5 @@
 //routes involving displaying and making posts
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const xss = require('xss');
@@ -8,17 +7,18 @@ const { authenticateUser } = require('../authorizeuser.js');
 const { getPosts } = require('../getposts.js');
 
 module.exports = (db_posts) => {
+  const router = express.Router();
   const htmlRoot = path.join(__dirname, '..', 'secured', 'html');
 
   //middleware for refreshing posts.json
   const refreshPosts = async (req, res, next) => {
     try {
       await getPosts(db_posts);
+      return next();
     } catch (err) {
       console.error('Failed to refresh posts:', err);
-      res.status(500).send('Unable to get posts.');
+      return res.status(500).send('Unable to get posts.');
     }
-    next();
   };
 
   //get route for contrib homepage
@@ -29,7 +29,7 @@ module.exports = (db_posts) => {
     // console.log('Line 184, role is ' + role);
     //only send to regular index if contributor
     if (role === 'CONTRIBUTOR') {
-      res.sendFile('index.html', { root: htmlRoot });
+      return res.sendFile('index.html', { root: htmlRoot });
     }
     //redirects to sub index
     return res.redirect('/index_subs.html');

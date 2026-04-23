@@ -1,11 +1,11 @@
 //register routes
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const bcrypt = require('bcrypt');
 const pepper = 'yshlxehpyoxi';
 
 module.exports = (db) => {
+  const router = express.Router();
   const registerHtmlRoot = path.join(__dirname, '..', 'public', 'html');
 
   //Register GET route -Vin

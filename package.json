@@ -15,7 +15,11 @@
   "type": "commonjs",
   "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive",
+    "test:unit": "mocha test/unit/*.test.js",
+    "test:system": "mocha test/system/*.test.js",
+    "test:security": "mocha test/security/*.test.js",
+    "test:coverage": "nyc npm test",
     "start": "node app/app.js",
     "dev": "nodemon app/app.js"
   },
@@ -87,8 +91,10 @@
     "set-function-length": "^1.2.2",
     "setprototypeof": "^1.2.0",
     "side-channel": "^1.0.6",
+    "sinon": "^21.1.2",
     "statuses": "^2.0.1",
     "stripe": "^22.0.1",
+    "supertest": "^7.2.2",
     "toidentifier": "^1.0.1",
     "type-is": "^1.6.18",
     "unpipe": "^1.0.0",

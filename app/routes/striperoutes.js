@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { authenticateUser } = require('../authorizeuser.js');
@@ -12,6 +11,7 @@ const PLANS = {
 };
 
 module.exports = (db) => {
+    const router = express.Router();
     // ── Payment page ──
     router.get('/payment', authenticateUser,(req, res) => {
         res.sendFile(path.join(__dirname, '..', 'secured', 'html', 'payment.html'), (err) => {

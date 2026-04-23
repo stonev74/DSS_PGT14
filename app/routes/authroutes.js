@@ -1,25 +1,25 @@
 //login route
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 
 const loginLimiter = rateLimit({
-    windowMs:       15 * 60 * 1000,
-    max:            10,
-    message:        'Too many login attempts. Please try again in 15 minutes.',
-    standardHeaders: true,
-    legacyHeaders:  false
+  windowMs:       15 * 60 * 1000,
+  max:            10,
+  message:        'Too many login attempts. Please try again in 15 minutes.',
+  standardHeaders: true,
+  legacyHeaders:  false
 });
 
 module.exports = (db) => {
+  const router = express.Router();
   const htmlRoot = path.join(__dirname, '..', 'public', 'html');
 
   router.post('/click', (req, res) => {
     const { x, y, n } = req.body;
     // console.log('Received:', x, y, n);
     // console.log(' n is a ', typeof n);
-    let user_n = n;
+    req.session.user_n = n
 
     res.json({ redirect: '/login' });
 
@@ -34,6 +34,7 @@ module.exports = (db) => {
   router.post('/password', loginLimiter, async (req, res) => {
     const username = req.body.username_input;
     const password = req.body.password_input;
+    const user_n = req.session.user_n;
     const ip_addr = req.socket.remoteAddress?.replace('::ffff:', '');
     try {
       const login_check = await db.one(
@@ -78,6 +79,5 @@ module.exports = (db) => {
       });
     }
   });
-
   return router;
 };
